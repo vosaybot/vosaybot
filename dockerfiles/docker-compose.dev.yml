@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  bot:
+    build:
+      context: ..
+      dockerfile: dockerfiles/bot.dockerfile
+      target: development
+    ports:
+      - 5678:5678
+    volumes:
+      - ../src/bot:/bot/bot
+      - ../src/migrations:/bot/migrations
+      - ../src/models:/bot/models
+      - ../src/scripts:/bot/scripts
+      - ../src/settings:/bot/settings
+      - ../src/run.py:/bot/run.py
+    command: python run.py
