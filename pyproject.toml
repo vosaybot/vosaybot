@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "voice-bot"
+version = "0.1.0"
+description = "Voice bot"
+authors = ["master <master@botproduction.org>"]
+
+[tool.isort]
+line_length = 99
+multi_line_output = 3
+include_trailing_comma = false
+
+[tool.black]
+line-length = 99
+
+[tool.poetry.dependencies]
+python = "^3.9"
+loguru = "^0.5.3"
+alembic = "^1.7.5"
+SQLAlchemy = "^1.4.29"
+python-telegram-bot = "^13.7"
+pydantic = {version = "^1.8.2", extras = ["dotenv"]}
+
+[tool.poetry.dev-dependencies]
+debugpy = "^1.5.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0a5"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,18 @@
+# byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ide
+**.vscode**
+**.idea**
+
+# files
+*.env
+assets/*
+
+# folders
+volumes
+
+# exclusions
+!assets/.gitkeep
