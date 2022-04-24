@@ -26,7 +26,7 @@ def upgrade():
         sa.Column("is_active", sa.BOOLEAN(), server_default=sa.text("true"), nullable=False, comment="Resource activity status"),
         sa.Column("modified_at", postgresql.TIMESTAMP(timezone=True), nullable=False, comment="Resource modification date"),
         sa.Column("title", sa.VARCHAR(length=50), nullable=False, comment="Title"),
-        sa.Column("slug", sa.Enum("me", "happy", "joy", "sadness", "anger", "question", "gloat", "agreement", "threat", "jealousy", "inspiration", "disappointment", "command", "greetings", "answer", "sarcasm", "other", name="available_emotions"), nullable=False, comment="Slug"),
+        sa.Column("slug", sa.Enum("me", "happy", "joy", "sadness", "anger", "question", "gloat", "agreement", "threat", "jealousy", "inspiration", "disappointment", "command", "greetings", "answer", "sarcasm", "other", "contempt", name="available_emotions"), nullable=False, comment="Slug"),
         sa.PrimaryKeyConstraint("uuid"),
         sa.UniqueConstraint("slug"),
         sa.UniqueConstraint("title"),

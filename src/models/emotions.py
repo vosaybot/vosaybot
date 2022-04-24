@@ -25,6 +25,7 @@ class available_emotions(enum.Enum):
     answer = "answer"
     sarcasm = "sarcasm"
     other = "other"
+    contempt = "contempt"
 
 
 emotion_model = Table(
