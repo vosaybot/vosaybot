@@ -1,9 +1,10 @@
 -include configs/bot.env
 export mode
 
+project_name := voice-bot
 compose_file := dockerfiles/docker-compose.yml
 dev_compose_file := dockerfiles/docker-compose.dev.yml
-compose := docker-compose -f $(compose_file)
+compose := docker-compose -p $(project_name) -f $(compose_file)
 
 ifeq ($(mode), development)
 	compose := $(compose) -f $(dev_compose_file)
@@ -88,7 +89,7 @@ top:
 
 sh: term
 term:
-	$(compose) exec bot sh
+	$(compose) exec bot bash
 
 sl: show_logs
 show_logs:
