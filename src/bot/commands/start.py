@@ -19,12 +19,14 @@ def start(update: Update, context: CallbackContext) -> None:
             for row in database.execute(category_model.select())
         ]
     )
-    _start_answer(update=update, text=mt.select_category, reply_markup=reply_markup)
+    _start_answer(
+        update=update, context=context, text=mt.select_category, reply_markup=reply_markup
+    )
 
 
-def _start_answer(update: Update, text: str, reply_markup=None) -> None:
+def _start_answer(update: Update, context: CallbackContext, text: str, reply_markup=None) -> None:
     if update.message:
-        update.message.reply_text(text, reply_markup=reply_markup)
+        res = update.message.reply_text(text, reply_markup=reply_markup)
         if len(update.message.text) > 6:
             invite_link_title = update.message.text.replace("/start ", "")
             user_uuid_subq = (
@@ -48,7 +50,9 @@ def _start_answer(update: Update, text: str, reply_markup=None) -> None:
             except IntegrityError:
                 pass
     else:
-        update.callback_query.message.reply_text(text, reply_markup=reply_markup)
+        res = update.callback_query.message.reply_text(text, reply_markup=reply_markup)
+
+    context.user_data["voices_message_id"] = [res.message_id]
 
 
 __all__ = ["start"]

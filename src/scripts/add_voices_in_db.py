@@ -86,7 +86,7 @@ def parse_voices_dir(category: Path) -> None:
             voices = get_voices_from_dir(voice_dir=emotion)
 
             if not emotion_is_valid(file_name=emotion.name):
-                logger.error(f"Subcategory {emotion} is not valid.")
+                logger.error(f"Emotion {emotion} is not valid.")
                 continue
 
             if emotion_resource := create_emotion(emotion.name):

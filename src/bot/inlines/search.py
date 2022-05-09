@@ -1,6 +1,6 @@
 from urllib.parse import quote
 
-from sqlalchemy import bindparam, or_, select
+from sqlalchemy import or_
 from telegram import InlineQueryResultAudio, Update, constants
 from telegram.ext import CallbackContext
 
@@ -25,7 +25,8 @@ def search(update: Update, context: CallbackContext) -> None:
     if text_search := update.inline_query.query:
         if text_search == "my":
             user_uuid_subq = (
-                select(user_model.c.uuid)
+                user_model.select()
+                .with_only_columns(user_model.c.uuid)
                 .where(user_model.c.telegram_id == update.effective_user.id)
                 .scalar_subquery()
             )

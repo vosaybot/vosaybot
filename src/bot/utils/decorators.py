@@ -9,7 +9,7 @@ from settings import database
 
 
 def check_user(f):
-    def wrapper(update: Update, *args: object) -> None:
+    def wrapper(update: Update, *args: object, **kwargs) -> None:
         try:
             if update.effective_user.is_bot:
                 logger.warning(
@@ -24,7 +24,7 @@ def check_user(f):
             ).first():
                 database.execute(user_model.insert().values(telegram_id=update.effective_user.id))
 
-            f(update, *args)
+            f(update, *args, **kwargs)
 
         except Unauthorized as err:
             logger.error("Error: {}\nUser: {}".format(err, args[0].effective_user.id))

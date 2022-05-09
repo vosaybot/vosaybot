@@ -11,6 +11,7 @@ class available_categories(enum.Enum):
     games = "games"
     films = "films"
     other = "other"
+    politicians = "politicians"
 
 
 category_model = Table(
