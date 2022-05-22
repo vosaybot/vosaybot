@@ -26,7 +26,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
 def _start_answer(update: Update, context: CallbackContext, text: str, reply_markup=None) -> None:
     if update.message:
-        res = update.message.reply_text(text, reply_markup=reply_markup)
+        res = update.message.reply_text(text, reply_markup=reply_markup, quote=False)
         if len(update.message.text) > 6:
             invite_link_title = update.message.text.replace("/start ", "")
             user_uuid_subq = (
@@ -50,7 +50,9 @@ def _start_answer(update: Update, context: CallbackContext, text: str, reply_mar
             except IntegrityError:
                 pass
     else:
-        res = update.callback_query.message.reply_text(text, reply_markup=reply_markup)
+        res = update.callback_query.message.reply_text(
+            text, reply_markup=reply_markup, quote=False
+        )
 
     context.user_data["voices_message_id"] = [res.message_id]
 

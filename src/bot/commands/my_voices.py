@@ -11,7 +11,7 @@ from bot.utils import (
     check_user,
     ct,
     delete_previous_messages,
-    mt,
+    mt
 )
 from models import user_model, user_voice_model, voice_model
 from settings import database, settings
@@ -81,11 +81,13 @@ def show_my_voices(update: Update, context: CallbackContext) -> None:
                 res = update.message.reply_voice(
                     f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
                     reply_markup=reply_markup,
+                    quote=False,
                 )
             else:
                 res = update.callback_query.message.reply_voice(
                     f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
                     reply_markup=reply_markup,
+                    quote=False,
                 )
             voices_message_id.append(res.message_id)
 

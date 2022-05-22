@@ -14,7 +14,7 @@ from bot.utils import (
     ct,
     delete_previous_messages,
     mt,
-    update_voice_inline_button,
+    update_voice_inline_button
 )
 from models import (
     available_categories,
@@ -22,7 +22,7 @@ from models import (
     subcategory_model,
     user_model,
     user_voice_model,
-    voice_model,
+    voice_model
 )
 from settings import database, settings
 
@@ -66,6 +66,7 @@ def _show_subcategories(update: Update, context: CallbackContext, data: str) -> 
     res = update.callback_query.message.reply_text(
         mt.select_category if len(keyboard) > 1 else mt.voices_not_found,
         reply_markup=InlineKeyboardMarkup(keyboard),
+        quote=False,
     )
 
     context.user_data["voices_message_id"] = [res.message_id]
@@ -144,6 +145,7 @@ def _show_voices(update: Update, context: CallbackContext, data: str) -> None:
             res = update.callback_query.message.reply_voice(
                 f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
                 reply_markup=reply_markup,
+                quote=False,
             )
 
             voices_message_id.append(res.message_id)
