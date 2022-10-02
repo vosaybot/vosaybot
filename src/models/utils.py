@@ -4,11 +4,11 @@ from sqlalchemy import DDL, Table, event
 from sqlalchemy.sql.ddl import DDLElement
 
 create_datetime_trigger_sql = """
-    CREATE TRIGGER modified_at BEFORE INSERT OR UPDATE
+    CREATE TRIGGER updated_at BEFORE INSERT OR UPDATE
     ON {} FOR EACH ROW EXECUTE PROCEDURE update_datetime()
 """
 drop_datetime_trigger_sql = """
-    DROP TRIGGER IF EXISTS modified_at ON {}
+    DROP TRIGGER IF EXISTS updated_at ON {}
 """
 
 
@@ -28,7 +28,7 @@ def _drop_datetime_trigger(model: Table) -> DDLElement:
     return trigger
 
 
-# more details about triggers can be found here:
+# Подробнее о триггерах для sqlalchemy можно посмотреть тут:
 # https://gist.github.com/jasco/5f742709088f80f07eb2e0d6a141d3f2
 # https://stackoverflow.com/questions/16629037/how-do-i-get-alembic-to-emit-custom-ddl-on-after-create
 def initialize_datetime_triggers(model: Table) -> Tuple[DDLElement, DDLElement]:

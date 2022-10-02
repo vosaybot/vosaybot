@@ -23,7 +23,7 @@ def upgrade():
         CREATE OR REPLACE FUNCTION update_datetime()
         RETURNS TRIGGER AS $$
         BEGIN
-            NEW.modified_at = now(); 
+            NEW.updated_at = now(); 
             RETURN NEW;
         END;
         $$ language 'plpgsql'

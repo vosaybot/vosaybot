@@ -21,10 +21,10 @@ def upgrade():
     op.create_table(
         # fmt: off
         "user_voice_relations",
-        sa.Column("uuid", postgresql.UUID(), server_default=sa.text("uuid_generate_v4()"), nullable=False, comment="Resource UUID"),
-        sa.Column("created_at", postgresql.TIMESTAMP(timezone=True), server_default=sa.text("now()"), nullable=False, comment="Resource creation date"),
-        sa.Column("modified_at", postgresql.TIMESTAMP(timezone=True), nullable=False, comment="Resource modification date"),
-        sa.Column("is_active", sa.BOOLEAN(), server_default=sa.text("true"), nullable=False, comment="Resource activity status"),
+        sa.Column("uuid", postgresql.UUID(), server_default=sa.text("uuid_generate_v4()"), nullable=False, comment="UUID ресурса"),
+        sa.Column("created_at", postgresql.TIMESTAMP(timezone=True), server_default=sa.text("now()"), nullable=False, comment="Дата создания"),
+        sa.Column("updated_at", postgresql.TIMESTAMP(timezone=True), nullable=False, comment="Дата обновления"),
+        sa.Column("is_active", sa.BOOLEAN(), server_default=sa.text("true"), nullable=False, comment="Статус активности"),
         sa.Column("user_uuid", postgresql.UUID(), nullable=False, comment="User UUID"),
         sa.Column("voice_uuid", postgresql.UUID(), nullable=False, comment="Voice UUID"),
         sa.ForeignKeyConstraint(["user_uuid"], ["public.users.uuid"], onupdate="CASCADE", ondelete="CASCADE"),

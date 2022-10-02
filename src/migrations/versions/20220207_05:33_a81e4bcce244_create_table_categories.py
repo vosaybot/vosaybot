@@ -21,10 +21,10 @@ def upgrade():
     op.create_table(
         # fmt: off
         "categories",
-        sa.Column("uuid", postgresql.UUID(), server_default=sa.text("uuid_generate_v4()"), nullable=False, comment="Resource UUID"),
-        sa.Column("created_at", postgresql.TIMESTAMP(timezone=True), server_default=sa.text("now()"), nullable=False, comment="Resource creation date"),
-        sa.Column("is_active", sa.BOOLEAN(), server_default=sa.text("true"), nullable=False, comment="Resource activity status"),
-        sa.Column("modified_at", postgresql.TIMESTAMP(timezone=True), nullable=False, comment="Resource modification date"),
+        sa.Column("uuid", postgresql.UUID(), server_default=sa.text("uuid_generate_v4()"), nullable=False, comment="UUID ресурса"),
+        sa.Column("created_at", postgresql.TIMESTAMP(timezone=True), server_default=sa.text("now()"), nullable=False, comment="Дата создания"),
+        sa.Column("is_active", sa.BOOLEAN(), server_default=sa.text("true"), nullable=False, comment="Статус активности"),
+        sa.Column("updated_at", postgresql.TIMESTAMP(timezone=True), nullable=False, comment="Дата обновления"),
         sa.Column("title", sa.VARCHAR(length=50), nullable=False, comment="Title"),
         sa.Column("slug", sa.Enum("games", "films", "other", "politicians", name="available_categories"), nullable=False, comment="Slug"),
         sa.PrimaryKeyConstraint("uuid"),
