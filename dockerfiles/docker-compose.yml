@@ -15,7 +15,7 @@ services:
     networks:
       - bot-db
     volumes:
-      - ../volumes/data:/var/lib/postgresql/data
+      - ../volumes/pg_data:/var/lib/postgresql/data
 
   bot:
     image: voice-bot
