@@ -106,12 +106,10 @@ style:
 gc: generate_configs
 generate_configs:
 	cp configs/db.env.example configs/db.env
-	cp configs/pgadmin.env.example configs/pgadmin.env
 	cp configs/bot.env.example configs/bot.env
 
 gs: generate_secrets
 generate_secrets:
-	@echo "pgadmin password:" $(shell python -c "import os; print(os.urandom(32).hex())")
 	@echo "postgres password:" $(shell python -c "import os; print(os.urandom(32).hex())")
 
 migrate:

@@ -4,9 +4,6 @@ networks:
   bot-db:
     name: bot-db
     driver: bridge
-  pgadmin-db:
-    name: pgadmin-db
-    driver: bridge
 
 services:
   db:
@@ -17,22 +14,8 @@ services:
       - ../configs/db.env
     networks:
       - bot-db
-      - pgadmin-db
     volumes:
       - ../volumes/data:/var/lib/postgresql/data
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: voice-bot-pgadmin
-    restart: always
-    env_file:
-      - ../configs/pgadmin.env
-    networks:
-      - pgadmin-db
-    depends_on:
-      - db
-    ports:
-      - 127.0.0.1:8101:80
 
   bot:
     image: voice-bot
