@@ -13,7 +13,11 @@ def start(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(
         [
             [InlineKeyboardButton(row["title"], callback_data=row["slug"].value)]
-            for row in database.execute(category_model.select())
+            for row in database.execute(
+                category_model.select().with_only_columns(
+                    category_model.c.title, category_model.c.slug
+                )
+            )
         ]
     )
     _start_answer(
