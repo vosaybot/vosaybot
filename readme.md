@@ -1,10 +1,10 @@
-# VoiceBot
+# VosayBot
 
-VoiceBot is a cool bot that will help you communicate using voice messages in the popular Telegram messenger. Just follow the link below and hit start!
+VosayBot is a cool bot that will help you communicate using voice messages in the popular Telegram messenger. Just follow the link below and hit start!
 
 The official bot is only available at this link: https://t.me/vosaybot
 
-- [VoiceBot](#voicebot)
+- [VosayBot](#vosaybot)
 - [Dependencies:](#dependencies)
 - [Launch preparation](#launch-preparation)
   - [Configuration files](#configuration-files)
