@@ -1,10 +1,10 @@
-FROM python:alpine as base
+FROM python:3.11-slim as base
 
 ENV PYTHONPATH /bot
 ENV POETRY_VIRTUALENVS_CREATE false
 
-RUN apk add --update --no-cache build-base gcc make musl-dev libffi-dev \
-    postgresql-dev python3-dev
+RUN apt-get update && apt-get install --no-install-recommends -qq -y \
+    build-essential libpq-dev python3-dev
 
 WORKDIR /bot/
 

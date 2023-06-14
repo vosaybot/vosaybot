@@ -108,10 +108,6 @@ generate_configs:
 	cp configs/db.env.example configs/db.env
 	cp configs/bot.env.example configs/bot.env
 
-gs: generate_secrets
-generate_secrets:
-	@echo "postgres password:" $(shell python -c "import os; print(os.urandom(32).hex())")
-
 migrate:
 	$(compose) exec bot alembic upgrade head
 
@@ -124,3 +120,7 @@ show_sql_migrations:
 
 add_voices_in_db:
 	$(compose) exec bot python scripts/add_voices_in_db.py
+
+gs: generate_secrets
+generate_secrets:
+	@echo "postgres password:" $(shell python -c "import os; print(os.urandom(32).hex())")
