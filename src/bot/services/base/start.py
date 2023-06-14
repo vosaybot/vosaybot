@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 
 from bot.utils import check_user, mt
 from bot.utils.decorators import delete_previous_messages
@@ -9,28 +9,28 @@ from settings import database
 
 @check_user
 @delete_previous_messages
-def start(update: Update, context: CallbackContext) -> None:
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_markup = InlineKeyboardMarkup(
         [
             [InlineKeyboardButton(row["title"], callback_data=row["slug"].value)]
-            for row in database.execute(
+            for row in await database.fetch_all(
                 category_model.select().with_only_columns(
                     category_model.c.title, category_model.c.slug
                 )
             )
         ]
     )
-    _start_answer(
+    await _start_answer(
         update=update, context=context, text=mt.select_category, reply_markup=reply_markup
     )
 
 
-def _start_answer(update: Update, context: CallbackContext, text: str, reply_markup=None) -> None:
-    res = (
-        update.message.reply_text(text, reply_markup=reply_markup, quote=False)
-        if update.message
-        else update.callback_query.message.reply_text(text, reply_markup=reply_markup, quote=False)
-    )
+async def _start_answer(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, reply_markup: InlineKeyboardMarkup) -> None:
+    if update.message:
+        res = await update.message.reply_text(text, reply_markup=reply_markup, quote=False)
+    else:
+        res = await update.callback_query.message.reply_text(text, reply_markup=reply_markup, quote=False)
+    
 
     context.user_data["voices_message_id"] = [res.message_id]
 

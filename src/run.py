@@ -1,5 +1,5 @@
 from loguru import logger
-from telegram.error import InvalidToken, NetworkError, Unauthorized
+from telegram.error import InvalidToken, NetworkError, Forbidden
 
 from bot import app
 from settings import configure_logger, development_mode, production_mode, settings
@@ -8,13 +8,12 @@ from settings import configure_logger, development_mode, production_mode, settin
 def run():
     configure_logger()
     try:
-        logger.info("Run bot...")
-        app.start_polling()
-        app.idle()
-    except (InvalidToken, Unauthorized) as err:
-        logger.error("Invalid telegram token.")
-    except NetworkError as err:
-        logger.error("Failed to establish a connection to the server.")
+        logger.info("Запуск бота...")
+        app.run_polling()
+    except (InvalidToken, Forbidden):
+        logger.error("Невалидный токен.")
+    except NetworkError:
+        logger.error("Ошибка при подключении к серверу.")
 
 
 if __name__ == "__main__" and settings.mode == production_mode:

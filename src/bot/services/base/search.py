@@ -2,7 +2,7 @@ from urllib.parse import quote
 
 from sqlalchemy import or_
 from telegram import InlineQueryResultAudio, Update, constants
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 
 from bot.utils import check_user
 from models import user_model, user_voice_model, voice_model
@@ -10,7 +10,7 @@ from settings import database, settings
 
 
 @check_user
-def search(update: Update, context: CallbackContext) -> None:
+async def search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     offset = 0 if not update.inline_query.offset else int(update.inline_query.offset)
     voices = (
         voice_model.select()
@@ -41,7 +41,7 @@ def search(update: Update, context: CallbackContext) -> None:
                 )
             )
 
-    update.inline_query.answer(
+    await update.inline_query.answer(
         [
             InlineQueryResultAudio(
                 id=voice["uuid"],
@@ -49,11 +49,11 @@ def search(update: Update, context: CallbackContext) -> None:
                 audio_url=f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
                 performer=voice["performer"],
             )
-            for voice in database.execute(voices)
+            for voice in await database.fetch_all(voices)
         ],
         cache_time=10,
         is_personal=True,
-        timeout=10,
+        connect_timeout=10,
         next_offset=offset + 1,
     )
 

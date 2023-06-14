@@ -1,6 +1,6 @@
 from urllib.parse import quote
 
-from sqlalchemy import func, select
+from sqlalchemy.sql.functions import count
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
 
@@ -19,7 +19,7 @@ from settings import database, settings
 
 @check_user
 @delete_previous_messages
-def show_my_voices(update: Update, context: CallbackContext) -> None:
+async def show_my_voices(update: Update, context: CallbackContext) -> None:
     if update.callback_query and update.callback_query.data.startswith("my_voices"):
         current_page = int(update.callback_query.data.replace("my_voices_", ""))
     elif update.callback_query and update.callback_query.data.startswith("d_m"):
@@ -33,12 +33,15 @@ def show_my_voices(update: Update, context: CallbackContext) -> None:
         .where(user_model.c.telegram_id == update.effective_user.id)
         .scalar_subquery()
     )
-    count_voices = database.execute(
-        select(func.count("*"))
+    count_voices = await database.fetch_one(
+        voice_model.select()
         .select_from(voice_model)
+        .with_only_columns(count().label("count"))
         .join(user_voice_model, voice_model.c.uuid == user_voice_model.c.voice_uuid, isouter=True)
         .where(user_voice_model.c.user_uuid == user_uuid_subq)
-    ).scalar()
+    )
+    count_voices = count_voices["count"]
+
     voices_query = (
         voice_model.select()
         .with_only_columns(
@@ -58,7 +61,7 @@ def show_my_voices(update: Update, context: CallbackContext) -> None:
         subcategory="voices",
     )
 
-    if voices := database.execute(voices_query).all():
+    if voices := await database.fetch_all(voices_query):
         voices_message_id, delete_voices_buttons = [], []
         for index, voice in enumerate(voices, start=1):
             delete_voices_buttons.append(
@@ -78,13 +81,13 @@ def show_my_voices(update: Update, context: CallbackContext) -> None:
                 reply_markup = None
 
             if update.message:
-                res = update.message.reply_voice(
+                res = await update.message.reply_voice(
                     f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
                     reply_markup=reply_markup,
                     quote=False,
                 )
             else:
-                res = update.callback_query.message.reply_voice(
+                res = await update.callback_query.message.reply_voice(
                     f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
                     reply_markup=reply_markup,
                     quote=False,
@@ -94,13 +97,13 @@ def show_my_voices(update: Update, context: CallbackContext) -> None:
         context.user_data["voices_message_id"] = voices_message_id
     else:
         if update.message:
-            update.message.reply_text(mt.my_voices_not_found)
+            await update.message.reply_text(mt.my_voices_not_found)
         else:
             if current_page > 1:
                 update.callback_query.data = f"my_voices_{current_page - 1}"
-                show_my_voices(update=update, context=context)
+                await show_my_voices(update=update, context=context)
             else:
-                update.callback_query.message.reply_text(mt.my_voices_not_found)
+                await update.callback_query.message.reply_text(mt.my_voices_not_found)
 
 
 __all__ = ["show_my_voices"]
