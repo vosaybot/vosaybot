@@ -91,6 +91,10 @@ sh: term
 term:
 	$(compose) exec bot bash
 
+sh_db: term_db
+term_db:
+	$(compose) exec db bash
+
 sl: show_logs
 show_logs:
 	cat logs/bot.log
