@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from pydantic import BaseSettings, Field, HttpUrl, PostgresDsn, validator
 import databases
+from pydantic import BaseSettings, Field, HttpUrl, PostgresDsn, validator
 
 development_mode, production_mode = "development", "production"
 

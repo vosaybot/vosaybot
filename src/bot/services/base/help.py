@@ -7,8 +7,8 @@ from bot.utils.decorators import delete_previous_messages
 
 @check_user
 @delete_previous_messages
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(text=mt.start)
+async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(text=mt.help)
 
 
-__all__ = ["start"]
+__all__ = ["help"]

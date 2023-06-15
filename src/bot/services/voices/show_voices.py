@@ -3,9 +3,9 @@ from urllib.parse import quote
 from loguru import logger
 from sqlalchemy import insert
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.sql.functions import count
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
-from sqlalchemy.sql.functions import count
 
 from bot.utils import (
     MAX_PAGES,
@@ -47,7 +47,9 @@ async def show_voices(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 
 @delete_previous_messages
-async def _show_subcategories(update: Update, context: ContextTypes.DEFAULT_TYPE, data: str) -> None:
+async def _show_subcategories(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, data: str
+) -> None:
     subcategories = (
         voice_model.select()
         .distinct()
@@ -65,7 +67,7 @@ async def _show_subcategories(update: Update, context: ContextTypes.DEFAULT_TYPE
     keyboard.append([InlineKeyboardButton(ct.back, callback_data="show_menu")])
 
     res = await update.callback_query.message.reply_text(
-        mt.select_category if len(keyboard) > 1 else mt.voices_not_found,
+        text=mt.select_category if len(keyboard) > 1 else mt.voices_not_found,
         reply_markup=InlineKeyboardMarkup(keyboard),
         quote=False,
     )

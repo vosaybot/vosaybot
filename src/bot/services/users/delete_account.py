@@ -11,7 +11,7 @@ from settings import database
 @delete_previous_messages
 async def delete_account_step_one(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        mt.delete_account_step_one,
+        text=mt.delete_account_step_one,
         reply_markup=InlineKeyboardMarkup(
             [[InlineKeyboardButton(ct.delete_account, callback_data="delete_account")]]
         ),
@@ -25,7 +25,7 @@ async def delete_account_step_two(update: Update, context: ContextTypes.DEFAULT_
         user_model.delete().where(user_model.c.telegram_id == update.effective_user.id)
     )
     await update.callback_query.message.edit_text(
-        mt.delete_account_step_two, parse_mode=ParseMode.MARKDOWN
+        text=mt.delete_account_step_two, parse_mode=ParseMode.MARKDOWN
     )
 
 

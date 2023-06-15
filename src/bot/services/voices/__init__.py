@@ -1,1 +1,2 @@
-from bot.services.voices.show import show_voices
+from bot.services.voices.show_categories import show_categories
+from bot.services.voices.show_voices import show_voices

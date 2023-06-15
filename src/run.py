@@ -1,5 +1,5 @@
 from loguru import logger
-from telegram.error import InvalidToken, NetworkError, Forbidden
+from telegram.error import Forbidden, InvalidToken, NetworkError
 
 from bot import app
 from settings import configure_logger, development_mode, production_mode, settings

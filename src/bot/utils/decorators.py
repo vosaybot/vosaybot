@@ -19,8 +19,12 @@ def check_user(f):
                 )
                 update.message.reply_text(message_text.bots_are_not_allowed)
                 return
-            elif not await database.fetch_one(user_model.select().where(user_model.c.telegram_id == update.effective_user.id)):
-                await database.execute(user_model.insert().values(telegram_id=update.effective_user.id))
+            elif not await database.fetch_one(
+                user_model.select().where(user_model.c.telegram_id == update.effective_user.id)
+            ):
+                await database.execute(
+                    user_model.insert().values(telegram_id=update.effective_user.id)
+                )
 
             await f(update, *args, **kwargs)
 
@@ -31,7 +35,9 @@ def check_user(f):
 
 
 def delete_previous_messages(f):
-    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args: object, **kwargs) -> None:
+    async def wrapper(
+        update: Update, context: ContextTypes.DEFAULT_TYPE, *args: object, **kwargs
+    ) -> None:
         try:
             for voices_message_id in context.user_data.get("voices_message_id", []):
                 try:

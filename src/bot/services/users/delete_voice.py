@@ -25,7 +25,9 @@ async def delete_voice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         await update.callback_query.message.edit_reply_markup(reply_markup=reply_markup)
 
 
-async def _delete_voice(update: Update, context: ContextTypes.DEFAULT_TYPE, voice_uuid: str) -> None:
+async def _delete_voice(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, voice_uuid: str
+) -> None:
     user_uuid_subq = (
         user_model.select()
         .with_only_columns(user_model.c.uuid)
