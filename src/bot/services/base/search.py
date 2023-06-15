@@ -1,7 +1,8 @@
 from urllib.parse import quote
 
 from sqlalchemy import or_
-from telegram import InlineQueryResultAudio, Update, constants
+from telegram import InlineQueryResultAudio, Update
+from telegram.constants import InlineQueryLimit
 from telegram.ext import ContextTypes
 
 from bot.utils import check_user
@@ -17,8 +18,8 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         .with_only_columns(
             voice_model.c.uuid, voice_model.c.title, voice_model.c.path, voice_model.c.performer
         )
-        .limit(constants.MAX_INLINE_QUERY_RESULTS)
-        .offset(offset * constants.MAX_INLINE_QUERY_RESULTS)
+        .limit(InlineQueryLimit.RESULTS)
+        .offset(offset * InlineQueryLimit.RESULTS)
         .order_by(voice_model.c.created_at)
     )
 
