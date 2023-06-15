@@ -6,7 +6,7 @@ from telegram.constants import InlineQueryLimit
 from telegram.ext import ContextTypes
 
 from bot.utils.decorators import check_user
-from models import user_model, user_voice_model, voice_model
+from models import category_model, subcategory_model, user_model, user_voice_model, voice_model
 from settings import database, settings
 
 
@@ -24,6 +24,9 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
     if text_search := update.inline_query.query:
+        voices = voices.join(
+            category_model, voice_model.c.category_uuid == category_model.c.uuid
+        ).join(subcategory_model, voice_model.c.subcategory_uuid == subcategory_model.c.uuid)
         if text_search == "my":
             user_uuid_subq = (
                 user_model.select()
@@ -32,13 +35,17 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 .scalar_subquery()
             )
             voices = voices.join(
-                user_voice_model, voice_model.c.uuid == user_voice_model.c.voice_uuid, isouter=True
+                user_voice_model,
+                voice_model.c.uuid == user_voice_model.c.voice_uuid,
+                isouter=True,
             ).where(user_voice_model.c.user_uuid == user_uuid_subq)
         else:
             voices = voices.where(
                 or_(
                     voice_model.c.title.ilike(f"%{text_search}%"),
                     voice_model.c.performer.ilike(f"%{text_search}%"),
+                    category_model.c.title.ilike(f"%{text_search}%"),
+                    subcategory_model.c.title.ilike(f"%{text_search}%"),
                 )
             )
 
