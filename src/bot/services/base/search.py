@@ -5,7 +5,7 @@ from telegram import InlineQueryResultAudio, Update
 from telegram.constants import InlineQueryLimit
 from telegram.ext import ContextTypes
 
-from bot.utils import check_user
+from bot.utils.decorators import check_user
 from models import user_model, user_voice_model, voice_model
 from settings import database, settings
 
@@ -47,7 +47,7 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             InlineQueryResultAudio(
                 id=voice["uuid"],
                 title=voice["title"],
-                audio_url=f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
+                audio_url=f"{settings.voice_url_path}/{quote(voice['path'])}",
                 performer=voice["performer"],
             )
             for voice in await database.fetch_all(voices)

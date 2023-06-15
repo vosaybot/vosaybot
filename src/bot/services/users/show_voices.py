@@ -4,15 +4,10 @@ from sqlalchemy.sql.functions import count
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
 
-from bot.utils import (
-    MAX_PAGES,
-    MAX_VOICES,
-    build_page_buttons,
-    check_user,
-    ct,
-    delete_previous_messages,
-    mt
-)
+from bot.utils.constants import MAX_PAGES, MAX_VOICES
+from bot.utils.decorators import check_user, delete_previous_messages
+from bot.utils.inline_keyboard import build_page_buttons
+from bot.utils.text import cdp, ct, mt
 from models import user_model, user_voice_model, voice_model
 from settings import database, settings
 
@@ -20,12 +15,13 @@ from settings import database, settings
 @check_user
 @delete_previous_messages
 async def show_my_voices(update: Update, context: CallbackContext) -> None:
-    if update.callback_query and update.callback_query.data.startswith("my_voices"):
-        current_page = int(update.callback_query.data.replace("my_voices_", ""))
-    elif update.callback_query and update.callback_query.data.startswith("d_m"):
-        current_page = int(update.callback_query.data[3])
-    else:
-        current_page = 1
+    current_page = 1
+
+    if update.callback_query:
+        if update.callback_query.data.startswith(cdp.show_my_voices):
+            current_page = int(update.callback_query.data.replace(f"{cdp.show_my_voices}_", ""))
+        elif update.callback_query.data.startswith(cdp.delete_voice):
+            current_page = int(update.callback_query.data.split("_")[1])
 
     user_uuid_subq = (
         user_model.select()
@@ -55,10 +51,9 @@ async def show_my_voices(update: Update, context: CallbackContext) -> None:
     )
 
     page_buttons = build_page_buttons(
+        prefix=cdp.show_my_voices,
         current_page=current_page,
         count_voices=count_voices,
-        category="my",
-        subcategory="voices",
     )
 
     if voices := await database.fetch_all(voices_query):
@@ -66,7 +61,8 @@ async def show_my_voices(update: Update, context: CallbackContext) -> None:
         for index, voice in enumerate(voices, start=1):
             delete_voices_buttons.append(
                 InlineKeyboardButton(
-                    ct.delete_voice_button, callback_data=f"d_m{current_page}_{voice['uuid']}"
+                    ct.delete_voice_button,
+                    callback_data=f"{cdp.delete_voice}{current_page}_{voice['uuid']}",
                 )
             )
             if index == len(voices):
@@ -74,7 +70,7 @@ async def show_my_voices(update: Update, context: CallbackContext) -> None:
                     [
                         page_buttons,
                         delete_voices_buttons,
-                        [InlineKeyboardButton(ct.menu, callback_data="show_menu")],
+                        [InlineKeyboardButton(ct.menu, callback_data=cdp.show_categories)],
                     ],
                 )
             else:
@@ -82,13 +78,13 @@ async def show_my_voices(update: Update, context: CallbackContext) -> None:
 
             if update.message:
                 res = await update.message.reply_voice(
-                    f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
+                    f"{settings.voice_url_path}/{quote(voice['path'])}",
                     reply_markup=reply_markup,
                     quote=False,
                 )
             else:
                 res = await update.callback_query.message.reply_voice(
-                    f"{settings.voice_url}/{settings.telegram_token}/assets/{quote(voice['path'])}",
+                    f"{settings.voice_url_path}/{quote(voice['path'])}",
                     reply_markup=reply_markup,
                     quote=False,
                 )

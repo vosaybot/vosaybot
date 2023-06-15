@@ -1,0 +1,3 @@
+MAX_PAGES, MAX_VOICES = 5, 5
+
+__all__ = ["MAX_PAGES", "MAX_VOICES"]

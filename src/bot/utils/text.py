@@ -31,7 +31,7 @@ class message_text:
     help = (
         "Список доступных команд:\n"
         "/start - Запуск бота\n"
-        "/voice - Показать voice-паки\n"
+        "/voices - Показать voice-паки\n"
         "/my_voices - Список сохранённых голосовых\n"
         "/delete_account - Удаление аккаунта\n"
         "/donate - Помочь в разработке\n\n"
@@ -51,3 +51,20 @@ class callback_text:
     delete_account = "Удалить аккаунт"
     save_voice_button = "💾"
     delete_voice_button = "❌"
+
+
+@dataclass
+class callback_data_prefix:
+    save_voice = "sv_"
+    delete_voice = "dl_"
+    show_categories = "show_categories"
+    show_subcategory = "sh_sc_"
+    show_voice = "sh_v_"
+    show_my_voices = "my_voices"
+
+
+mt = message_text
+ct = callback_text
+cdp = callback_data_prefix
+
+__all__ = ["mt", "ct", "cdp"]

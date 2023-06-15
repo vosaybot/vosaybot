@@ -2,7 +2,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
-from bot.utils import check_user, ct, delete_previous_messages, mt
+from bot.utils.decorators import check_user, delete_previous_messages
+from bot.utils.text import ct, mt
 from models import user_model
 from settings import database
 

@@ -11,7 +11,7 @@ class BaseConfig(BaseSettings):
     telegram_token: str
     telegram_base_url: str = Field(default="")
     db_url: PostgresDsn
-    voice_url: HttpUrl
+    voice_url_path: HttpUrl
 
     @validator("mode")
     def mode_validator(cls, value):

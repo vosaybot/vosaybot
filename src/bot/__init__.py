@@ -14,7 +14,8 @@ from bot.services.users import (
     delete_voice,
     show_my_voices
 )
-from bot.services.voices import show_categories, show_voices
+from bot.services.voices import save_voice, show_categories, show_subcategory, show_voices
+from bot.utils.text import cdp
 from settings import database, settings
 
 
@@ -38,13 +39,15 @@ app.add_handler(CommandHandler("donate", donate))
 app.add_handler(InlineQueryHandler(search))
 
 # users
-app.add_handler(CommandHandler("my_voices", show_my_voices))
-app.add_handler(CallbackQueryHandler(show_my_voices, pattern="my_voices"))
-app.add_handler(CallbackQueryHandler(delete_voice, pattern="d_"))
+app.add_handler(CommandHandler(cdp.show_my_voices, show_my_voices))
+app.add_handler(CallbackQueryHandler(show_my_voices, pattern=cdp.show_my_voices))
+app.add_handler(CallbackQueryHandler(delete_voice, pattern=cdp.delete_voice))
 app.add_handler(CommandHandler("delete_account", delete_account_step_one))
 app.add_handler(CallbackQueryHandler(delete_account_step_two, pattern="delete_account"))
 
 # voices
 app.add_handler(CommandHandler("voices", show_categories))
-app.add_handler(CallbackQueryHandler(show_categories, pattern="show_menu"))
-app.add_handler(CallbackQueryHandler(show_voices, pattern=""))
+app.add_handler(CallbackQueryHandler(show_categories, pattern=cdp.show_categories))
+app.add_handler(CallbackQueryHandler(show_subcategory, pattern=cdp.show_subcategory))
+app.add_handler(CallbackQueryHandler(show_voices, pattern=cdp.show_voice))
+app.add_handler(CallbackQueryHandler(save_voice, pattern=cdp.save_voice))

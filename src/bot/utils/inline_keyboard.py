@@ -2,28 +2,31 @@ import math
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot.utils.text import callback_text as ct
-
-MAX_PAGES, MAX_VOICES = 5, 5
+from bot.utils.constants import MAX_PAGES, MAX_VOICES
+from bot.utils.text import cdp, ct
 
 
 def update_voice_inline_button(
     reply_markup: InlineKeyboardMarkup, data: str, voice_uuid: str, is_delete_button: bool = False
 ):
+    keyboard = []
     for buttons in reply_markup.inline_keyboard:
+        row = []
         for button in buttons:
+            text, callback_data = button.text, button.callback_data
             if button.callback_data == data:
                 if is_delete_button:
-                    button.text = ct.delete_voice_button
-                    button.callback_data = f"d_{voice_uuid}"
+                    text, callback_data = ct.delete_voice_button, f"{cdp.delete_voice}{voice_uuid}"
                 else:
-                    button.text = ct.save_voice_button
-                    button.callback_data = f"s_{voice_uuid}"
-                return
+                    text, callback_data = ct.save_voice_button, f"{cdp.save_voice}{voice_uuid}"
+            row.append(InlineKeyboardButton(text=text, callback_data=callback_data))
+        keyboard.append(row)
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
 def build_page_buttons(
-    current_page: int, count_voices: int, category: str, subcategory: str
+    prefix: str, current_page: int, count_voices: int
 ) -> list[InlineKeyboardButton]:
     if count_voices <= MAX_VOICES:
         return []
@@ -35,21 +38,19 @@ def build_page_buttons(
 
     if current_page + 2 > MAX_PAGES:
         pages_buttons.append(
-            InlineKeyboardButton("<", callback_data=f"{category}_{subcategory}_{current_page - 1}")
+            InlineKeyboardButton("<", callback_data=f"{prefix}_{current_page - 1}")
         )
 
     for page_idx in range(start_page, end_page + 1):
         if current_page == page_idx:
             page_idx = "*"
         pages_buttons.append(
-            InlineKeyboardButton(
-                f"{page_idx}", callback_data=f"{category}_{subcategory}_{page_idx}"
-            )
+            InlineKeyboardButton(f"{page_idx}", callback_data=f"{prefix}_{page_idx}")
         )
 
     if current_page + 2 < real_count_pages and real_count_pages > MAX_PAGES:
         pages_buttons.append(
-            InlineKeyboardButton(">", callback_data=f"{category}_{subcategory}_{current_page + 1}")
+            InlineKeyboardButton(">", callback_data=f"{prefix}_{current_page + 1}")
         )
 
     return pages_buttons
