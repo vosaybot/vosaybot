@@ -9,10 +9,8 @@ __pycache__/
 
 # files
 *.env
-assets/*
+assets
 
 # folders
 volumes
 
-# exclusions
-!assets/.gitkeep

@@ -16,7 +16,6 @@ help:
 	@echo "  make COMMAND"
 	@echo ""
 	@echo "Commands:"
-	@echo "  rl, run_local		Running locally for development"
 	@echo "  b, build		Build all containers"
 	@echo "  u, up, run, install	Build and up containers"
 	@echo "  bu, build_and_up	Rebuild and up containers"
@@ -46,10 +45,6 @@ help:
 	@echo ""
 	@echo -e "\033[1mNOTE\033[0m: For other container commands use docker or docker-compose."
 
-rl: run_local
-run_local:
-	poetry run python src/run.py
-
 b: build
 build:
 	$(compose) build
@@ -62,7 +57,7 @@ install:
 
 bu: build_and_up
 build_and_up:
-	$(compose) up -d --build $(service)
+	$(compose) up -d --build $(args)
 
 rm: remove
 remove:
@@ -101,7 +96,7 @@ show_logs:
 
 sdl: show_docker_logs
 show_docker_logs:
-	$(compose) logs -f $(service)
+	$(compose) logs -f $(args)
 
 style:
 	black src

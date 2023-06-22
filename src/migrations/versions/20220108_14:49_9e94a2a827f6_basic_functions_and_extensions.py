@@ -1,4 +1,4 @@
-"""create basic functions and extensions
+"""basic functions and extensions
 
 Revision ID: 9e94a2a827f6
 Revises: 

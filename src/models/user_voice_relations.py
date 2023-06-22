@@ -11,11 +11,13 @@ user_voice_model = Table(
     metadata,
     *deepcopy(base_fields),
     # fmt: off
-    Column("user_uuid", UUID, ForeignKey("public.users.uuid", onupdate="CASCADE", ondelete="CASCADE"), nullable=False, comment="User UUID"),
-    Column("voice_uuid", UUID, ForeignKey("public.voices.uuid", onupdate="CASCADE", ondelete="CASCADE"), nullable=False, comment="Voice UUID"),
-    UniqueConstraint("user_uuid", "voice_uuid", name="user_voice_constraint"),
+    Column("user_uuid",  UUID, ForeignKey("public.users.uuid",  onupdate="CASCADE", ondelete="CASCADE"), nullable=False, comment="UUID пользователя"),
+    Column("voice_uuid", UUID, ForeignKey("public.voices.uuid", onupdate="CASCADE", ondelete="CASCADE"), nullable=False, comment="UUID голосового сообщения"),
+
+    UniqueConstraint("user_uuid", "voice_uuid", name="uc_user_voice"),
+    
     schema="public",
-    comment="User voice relations"
+    comment="Отношение пользователей и голосовых сообщений"
 )
 
 

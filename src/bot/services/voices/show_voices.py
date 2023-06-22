@@ -8,7 +8,7 @@ from bot.utils.constants import MAX_PAGES, MAX_VOICES
 from bot.utils.decorators import check_user, delete_previous_messages
 from bot.utils.inline_keyboard import build_page_buttons
 from bot.utils.text import cdp, ct
-from models import category_model, subcategory_model, user_model, user_voice_model, voice_model
+from models import user_model, user_voice_model, voice_model
 from settings import database, settings
 
 
@@ -42,19 +42,15 @@ async def _show_voices(update: Update, context: ContextTypes.DEFAULT_TYPE, data:
         voice_model.select()
         .select_from(voice_model)
         .with_only_columns(count().label("count"))
-        .join(category_model, voice_model.c.category_uuid == category_model.c.uuid)
-        .join(subcategory_model, voice_model.c.subcategory_uuid == subcategory_model.c.uuid)
-        .where(category_model.c.slug == category, subcategory_model.c.slug == subcategory)
+        .where(voice_model.c.category == category, voice_model.c.subcategory == subcategory)
     )
     count_voices = count_voices["count"]
 
     voices_query = (
         voice_model.select()
         .with_only_columns(voice_model.c.uuid, voice_model.c.path, user_voice_subq.c.uuid)
-        .join(category_model, voice_model.c.category_uuid == category_model.c.uuid)
-        .join(subcategory_model, voice_model.c.subcategory_uuid == subcategory_model.c.uuid)
         .join(user_voice_subq, voice_model.c.uuid == user_voice_subq.c.voice_uuid, full=True)
-        .where(category_model.c.slug == category, subcategory_model.c.slug == subcategory)
+        .where(voice_model.c.category == category, voice_model.c.subcategory == subcategory)
         .offset((MAX_PAGES * current_page) - MAX_PAGES)
         .limit(MAX_VOICES)
     )

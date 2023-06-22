@@ -10,10 +10,10 @@ user_model = Table(
     metadata,
     *deepcopy(base_fields),
     # fmt: off
-    Column("telegram_id", BIGINT, nullable=False, unique=True, comment="Telegram ID"),
-    Column("is_manager", BOOLEAN, server_default=false(), nullable=False, comment="Manager status"),
+    Column("telegram_id", BIGINT,                          nullable=False, unique=True,  comment="Telegram ID"),
+    Column("is_manager",  BOOLEAN, server_default=false(), nullable=False, unique=False, comment="Статус менеджера"),
     schema="public",
-    comment="Users"
+    comment="Пользователи"
 )
 
 

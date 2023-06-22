@@ -3,8 +3,7 @@ from telegram.ext import ContextTypes
 
 from bot.utils.decorators import check_user, delete_previous_messages
 from bot.utils.text import cdp, mt
-from models import category_model
-from settings import database
+from models import categories
 
 
 @check_user
@@ -12,16 +11,8 @@ from settings import database
 async def show_categories(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_markup = InlineKeyboardMarkup(
         [
-            [
-                InlineKeyboardButton(
-                    text=row.title, callback_data=f"{cdp.show_subcategory}{row['slug'].value}"
-                )
-            ]
-            for row in await database.fetch_all(
-                category_model.select().with_only_columns(
-                    category_model.c.title, category_model.c.slug
-                )
-            )
+            [InlineKeyboardButton(text=c.value, callback_data=f"{cdp.show_subcategory}{c.name}")]
+            for c in categories
         ]
     )
     await _make_answer(
