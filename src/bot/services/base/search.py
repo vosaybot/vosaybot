@@ -55,10 +55,10 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             for voice in await database.fetch_all(voices)
         ],
-        cache_time=10,
+        cache_time=5,
         is_personal=True,
         connect_timeout=10,
-        next_offset=offset + 1,
+        next_offset=str(offset + 1),
     )
 
 

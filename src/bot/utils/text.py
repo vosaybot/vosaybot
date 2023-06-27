@@ -2,11 +2,37 @@ from dataclasses import dataclass
 
 
 @dataclass
+class callback_text:
+    menu = "Меню"
+    back = "Назад"
+    delete_account = "Удалить аккаунт"
+    save_voice_button = "💾"
+    delete_voice_button = "❌"
+
+
+ct = callback_text
+
+
+@dataclass
+class callback_data_prefix:
+    save_voice = "sv_"
+    delete_voice = "dl_"
+    show_categories = "show_categories"
+    show_subcategory = "sh_sc_"
+    show_voice = "sh_v_"
+    show_my_voices = "my_voices"
+
+
+cdp = callback_data_prefix
+
+
+@dataclass
 class message_text:
     start = (
         "Привет! Меня зовут VosayBot и я стану твоим незаменимым помошником в общении.\n\n"
         "Группа новостей бота: @vosaynews\n"
-        "Команда помошник: /help\n"
+        "Помощь: /help\n"
+        "Помощь(расширенная): /help_advanced\n"
         "Помочь в разработке: /donate\n\n"
         "Жми /voices и начинай погружение в мир voice-стикеров!"
     )
@@ -28,6 +54,10 @@ class message_text:
         "*Предупреждение*: При попытке использовать бота в любом из режимов аккаунт будет создан автоматически.\n\n"
         "Надеюсь мы еще увидимся!😇"
     )
+    donate = (
+        "Спасибо, что ты используешь VosayBot! Поддержать разработчика можно следующими способами:\n"
+        "Monero: `47bDCeAvB2nh3aAcmBXetD2uYSCDZTgru8kZEVLT5XJgX2eHhuJafYpVHNYkoms112Mbpnv6NsYARJXTbEzjSVsvG1m6aja`"
+    )
     help = (
         "Список доступных команд:\n"
         "/start - Запуск бота\n"
@@ -38,33 +68,16 @@ class message_text:
         "Возможности inline режима:\n"
         "my - Список сохранённых голосовых"
     )
-    donate = (
-        "Спасибо, что ты используешь VosayBot! Поддержать разработчика можно следующими способами:\n"
-        "Monero: `47bDCeAvB2nh3aAcmBXetD2uYSCDZTgru8kZEVLT5XJgX2eHhuJafYpVHNYkoms112Mbpnv6NsYARJXTbEzjSVsvG1m6aja`"
+    help_advanced = (
+        "*Сохранение и удаление голосовых сообщений:*\n\n"
+        f"{ct.save_voice_button} - кнопка сохранения. Сохраняет голосове сообщение в базу пользователя, после нажатия меняется на кнопку {ct.delete_voice_button}.\n"
+        f"{ct.delete_voice_button} - кнопка удаления. Удаляет голосове сообщение из базы пользователя, после нажатия меняется на кнопку {ct.save_voice_button}.\n\n"
+        "*Управление голосовыми сообщениями:*\n\n"
+        "Сохранённые сообщения можно легко просматривать/удалять вызвав команду: `my_voices`.\n"
+        "Также сохранённые сообщения можно легко просматривать и отправлять в `inline` режиме написав в любом чате: `@vosaybot my`."
     )
 
 
-@dataclass
-class callback_text:
-    menu = "Меню"
-    back = "Назад"
-    delete_account = "Удалить аккаунт"
-    save_voice_button = "💾"
-    delete_voice_button = "❌"
-
-
-@dataclass
-class callback_data_prefix:
-    save_voice = "sv_"
-    delete_voice = "dl_"
-    show_categories = "show_categories"
-    show_subcategory = "sh_sc_"
-    show_voice = "sh_v_"
-    show_my_voices = "my_voices"
-
-
 mt = message_text
-ct = callback_text
-cdp = callback_data_prefix
 
-__all__ = ["mt", "ct", "cdp"]
+__all__ = ["ct", "cdp", "mt"]

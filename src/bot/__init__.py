@@ -7,7 +7,7 @@ from telegram.ext import (
     InlineQueryHandler
 )
 
-from bot.services.base import donate, help, search, start
+from bot.services.base import donate, help, help_advanced, search, start
 from bot.services.users import (
     delete_account_step_one,
     delete_account_step_two,
@@ -35,6 +35,7 @@ app = app.build()
 # base
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("help", help))
+app.add_handler(CommandHandler("help_advanced", help_advanced))
 app.add_handler(CommandHandler("donate", donate))
 app.add_handler(InlineQueryHandler(search))
 
