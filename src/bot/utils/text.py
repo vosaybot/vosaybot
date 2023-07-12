@@ -20,6 +20,7 @@ class callback_data_prefix:
     show_categories = "show_categories"
     show_subcategory = "sh_sc_"
     show_voice = "sh_v_"
+    show_popular = "popular"
     show_my_voices = "my_voices"
 
 
@@ -46,6 +47,7 @@ class message_text:
         "Вы не сохранили ни одного голосового сообщения! "
         "Используйте команду /start, чтобы просмотреть все доступные голосовые."
     )
+    popular_not_found = "Hic sunt dracones!"
     delete_account_step_one = (
         "Ваш аккаунт и все сохранённые сообщения будут удалены! Вы уверены, что хотите продолжить?"
     )
@@ -62,8 +64,10 @@ class message_text:
         "Список доступных команд:\n"
         "/start - Запуск бота\n"
         "/voices - Показать voice-паки\n"
+        "/popular - Популярные voice-стикеры\n"
         "/my_voices - Список сохранённых голосовых\n"
         "/delete_account - Удаление аккаунта\n"
+        "/help_advanced - Помощь(расширенная)\n"
         "/donate - Помочь в разработке\n\n"
         "Возможности inline режима:\n"
         "my - Список сохранённых голосовых"

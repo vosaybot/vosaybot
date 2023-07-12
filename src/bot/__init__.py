@@ -14,7 +14,13 @@ from bot.services.users import (
     delete_voice,
     show_my_voices
 )
-from bot.services.voices import save_voice, show_categories, show_subcategory, show_voices
+from bot.services.voices import (
+    save_voice,
+    show_categories,
+    show_popular,
+    show_subcategory,
+    show_voices
+)
 from bot.utils.text import cdp
 from settings import database, settings
 
@@ -48,6 +54,8 @@ app.add_handler(CallbackQueryHandler(delete_account_step_two, pattern="delete_ac
 
 # voices
 app.add_handler(CommandHandler("voices", show_categories))
+app.add_handler(CommandHandler(cdp.show_popular, show_popular))
+app.add_handler(CallbackQueryHandler(show_popular, pattern=cdp.show_popular))
 app.add_handler(CallbackQueryHandler(show_categories, pattern=cdp.show_categories))
 app.add_handler(CallbackQueryHandler(show_subcategory, pattern=cdp.show_subcategory))
 app.add_handler(CallbackQueryHandler(show_voices, pattern=cdp.show_voice))

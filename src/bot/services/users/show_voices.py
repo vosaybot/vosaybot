@@ -14,14 +14,17 @@ from settings import database, settings
 
 @check_user
 @delete_previous_messages
-async def show_my_voices(update: Update, context: CallbackContext) -> None:
+async def show_my_voices(
+    update: Update, context: CallbackContext, callback_data: str | None = None
+) -> None:
     current_page = 1
 
     if update.callback_query:
-        if update.callback_query.data.startswith(cdp.show_my_voices):
-            current_page = int(update.callback_query.data.replace(f"{cdp.show_my_voices}_", ""))
-        elif update.callback_query.data.startswith(cdp.delete_voice):
-            current_page = int(update.callback_query.data.split("_")[1])
+        callback_data = callback_data or update.callback_query.data
+        if callback_data.startswith(cdp.show_my_voices):
+            current_page = int(callback_data.replace(f"{cdp.show_my_voices}_", ""))
+        elif callback_data.startswith(cdp.delete_voice):
+            current_page = int(callback_data.split("_")[1])
 
     user_uuid_subq = (
         user_model.select()
@@ -96,8 +99,8 @@ async def show_my_voices(update: Update, context: CallbackContext) -> None:
             await update.message.reply_text(mt.my_voices_not_found)
         else:
             if current_page > 1:
-                update.callback_query.data = f"my_voices_{current_page - 1}"
-                await show_my_voices(update=update, context=context)
+                callback_data = f"{cdp.show_my_voices}_{current_page - 1}"
+                await show_my_voices(update=update, context=context, callback_data=callback_data)
             else:
                 await update.callback_query.message.reply_text(mt.my_voices_not_found)
 

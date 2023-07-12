@@ -1,5 +1,6 @@
+-include configs/db.env
 -include configs/bot.env
-export mode
+export mode, POSTGRES_USER
 
 project_name := voice-bot
 compose_file := dockerfiles/docker-compose.yml
@@ -89,6 +90,10 @@ term:
 sh_db: term_db
 term_db:
 	$(compose) exec db bash
+
+sh_db_psql: term_db_psql
+term_db_psql:
+	$(compose) exec db psql -U $(POSTGRES_USER)
 
 sl: show_logs
 show_logs:
